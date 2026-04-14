@@ -1,0 +1,58 @@
+<div class="container py-4">
+
+  <div class="mb-4 title-card">
+    <h1 class="h4 fw-medium mb-1">Catalogue de pièces</h1>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-secondary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    <div class="row g-4 mb-4">
+      @for (part of parts; track part.id) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card h-100 border">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                <div>
+                  <h5 class="card-title fs-6 fw-medium mb-1">{{ part.name }}</h5>
+                  <code class="text-muted" style="font-size: 11px;">{{ part.reference }}</code>
+                </div>
+                <span class="badge rounded-pill"
+                  [class.text-bg-success]="part.part_condition === 'neuf'"
+                  [class.text-bg-primary]="part.part_condition === 'reconditionné'"
+                  [class.text-bg-warning]="part.part_condition === 'occasion'">
+                  {{ part.part_condition }}
+                </span>
+              </div>
+
+              <ul class="list-unstyled small mb-0">
+                <li class="d-flex justify-content-between py-1 border-bottom">
+                  <span class="text-muted">Marque</span>
+                  <span class="fw-medium">{{ part.brand.name }}</span>
+                </li>
+                <li class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Catégorie</span>
+                  <span class="fw-medium">{{ part.category.name }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+              <span class="fs-5 fw-medium">{{ part.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</span>
+              <span class="badge" [class]="'text-bg-' + getStockClass(part)">
+                {{ getStockLabel(part) }}
+              </span>
+            </div>
+
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
