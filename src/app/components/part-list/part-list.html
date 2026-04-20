@@ -1,7 +1,27 @@
 <div class="container py-4">
-
-  <div class="mb-4 title-card">
+  <div class="mb-4 title-card d-flex justify-content-between align-items-center">
     <h1 class="h4 fw-medium mb-1">Catalogue de pièces</h1>
+    <div class="d-flex align-items-center">
+      <select
+        name="category"
+        id="category"
+        class="form-select mx-2"
+        (change)="onCategoryChange($event)"
+      >
+        <option value="">Toutes les catégories</option>
+        @for (category of categories(); track category) {
+          <option [value]="'/api/categories/' + category.id" [selected]="category.id === categoryFilter">
+            {{ category.name }}
+          </option>
+        }
+      </select>
+      <select name="brand" id="brand" class="form-select mx-2" (change)="onBrandChange($event)">
+        <option value="">Toutes les marques</option>
+        @for (brand of brands(); track brand) {
+          <option [value]="'/api/brands/' + brand.id" [selected]="brand.id === brandFilter">{{ brand.name }}</option>
+        }
+      </select>
+    </div>
   </div>
 
   @if (isLoading()) {
@@ -21,12 +41,14 @@
               <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                 <div>
                   <h5 class="card-title fs-6 fw-medium mb-1">{{ part.name }}</h5>
-                  <code class="text-muted" style="font-size: 11px;">{{ part.reference }}</code>
+                  <code class="text-muted" style="font-size: 11px">{{ part.reference }}</code>
                 </div>
-                <span class="badge rounded-pill"
+                <span
+                  class="badge rounded-pill"
                   [class.text-bg-success]="part.part_condition === 'neuf'"
                   [class.text-bg-primary]="part.part_condition === 'reconditionné'"
-                  [class.text-bg-warning]="part.part_condition === 'occasion'">
+                  [class.text-bg-warning]="part.part_condition === 'occasion'"
+                >
                   {{ part.part_condition }}
                 </span>
               </div>
@@ -43,16 +65,73 @@
               </ul>
             </div>
 
-            <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-              <span class="fs-5 fw-medium">{{ part.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</span>
+            <div
+              class="card-footer bg-transparent d-flex justify-content-between align-items-center"
+            >
+              <span class="fs-5 fw-medium">{{
+                part.price | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr'
+              }}</span>
               <span class="badge" [class]="'text-bg-' + getStockClass(part)">
                 {{ getStockLabel(part) }}
               </span>
             </div>
-
           </div>
         </div>
       }
+    </div>
+  }
+
+  @if (!isLoading() && nbPages > 1) {
+    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+      <span class="text-muted small">
+        Affichage de {{ (currentPage - 1) * itemsPerPage + 1 }} à {{ lastItemIndex }} sur
+        {{ totalItems }} pièces
+      </span>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button
+              class="page-link"
+              (click)="goToPage(currentPage - 1, categoryFilter, brandFilter)"
+            >
+              Précédent
+            </button>
+          </li>
+          <li class="page-item" [class.active]="currentPage === 1">
+            <button class="page-link" (click)="goToPage(1, categoryFilter, brandFilter)">1</button>
+          </li>
+          @if (currentPage > 2) {
+            <li class="page-item disabled">
+              <span class="page-link">…</span>
+            </li>
+          }
+          @if (currentPage >= 2 && currentPage < nbPages) {
+            <li class="page-item active">
+              <button class="page-link">{{ currentPage }}</button>
+            </li>
+          }
+          @if (currentPage < nbPages - 2) {
+            <li class="page-item disabled">
+              <span class="page-link">…</span>
+            </li>
+          }
+          @if (nbPages > 1) {
+            <li class="page-item" [class.active]="currentPage === nbPages">
+              <button class="page-link" (click)="goToPage(nbPages, categoryFilter, brandFilter)">
+                {{ nbPages }}
+              </button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="currentPage === nbPages">
+            <button
+              class="page-link"
+              (click)="goToPage(currentPage + 1, categoryFilter, brandFilter)"
+            >
+              Suivant
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   }
 </div>
