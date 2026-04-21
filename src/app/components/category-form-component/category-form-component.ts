@@ -23,10 +23,9 @@ export class CategoryFormComponent {
 
   sendForm() {
     if (this.formulaire.valid) {
-      const categoryData = {
-        name: this.formulaire.get('name')?.value,
-        description: this.formulaire.get('description')?.value
-      };
+      const categoryData = new FormData();
+      categoryData.append('name', this.formulaire.get('name')?.value);
+      categoryData.append('description', this.formulaire.get('description')?.value);
 
       this.apiService.postCategory(categoryData).subscribe({
         next: (response) => {

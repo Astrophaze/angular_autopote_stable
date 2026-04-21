@@ -29,15 +29,15 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/brands`);
   }
 
-  postCategory(data: any) {
+  postCategory(data: FormData) {
     return this.http.post(`${this.apiUrl}/categories`, data);
   }
 
-  postBrand(data: any) {
+  postBrand(data: FormData) {
     return this.http.post(`${this.apiUrl}/brands`, data);
   }
 
-  postPart(data: any) {
+  postPart(data: FormData) {
     return this.http.post(`${this.apiUrl}/parts`, data);
   }
 
