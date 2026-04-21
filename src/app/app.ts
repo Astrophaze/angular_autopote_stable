@@ -11,6 +11,7 @@ import { AuthService } from './services/auth-service';
 })
 export class App implements OnInit {
   protected readonly title = signal('angular_autopote');
+  isLoaded = signal<boolean>(false);
 
   constructor(private authService: AuthService) {
     
@@ -18,7 +19,10 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.authService.fetchJwtToken().subscribe({
-      next: (response) => {console.log(response)},
+      next: (response) => {
+        console.log(response);
+        this.isLoaded.set(true);
+      },
       error: (err) => {
         console.error('Impossible de récupérer le JWT');
         console.log(err);

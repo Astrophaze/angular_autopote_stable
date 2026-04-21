@@ -21,7 +21,7 @@ export class PartListComponent implements OnInit {
   brandFilter: string = '';
   isLoading = signal<boolean>(false);
 
-  constructor(private partService: ApiService, public authService: AuthService) {}
+  constructor(private partService: ApiService) {}
 
   get nbPages(): number {
     return Math.ceil(this.totalItems / this.itemsPerPage);
