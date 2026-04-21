@@ -60,20 +60,19 @@ export class PartFormComponent implements OnInit {
 
   sendForm() {
     if (this.formulaire.valid) {
-      const partData = {
-        name: this.formulaire.get('name')?.value,
-        reference: this.formulaire.get('reference')?.value,
-        description: this.formulaire.get('description')?.value,
-        price: this.formulaire.get('price')?.value,
-        stock: this.formulaire.get('stock')?.value,
-        part_condition: this.formulaire.get('part_condition')?.value,
-        isAvailable: this.formulaire.get('isAvailable')?.value,
-        createdAt: new Date().toISOString(),
-        brand: `/api/brands/${this.formulaire.get('brand')?.value}`,
-        category: `/api/categories/${this.formulaire.get('category')?.value}`
-      };
+      const formData = new FormData();
+      formData.append('name', this.formulaire.get('name')?.value);
+      formData.append('reference', this.formulaire.get('reference')?.value);
+      formData.append('description', this.formulaire.get('description')?.value);
+      formData.append('price', this.formulaire.get('price')?.value);
+      formData.append('stock', this.formulaire.get('stock')?.value);
+      formData.append('part_condition', this.formulaire.get('part_condition')?.value);
+      formData.append('isAvailable', this.formulaire.get('isAvailable')?.value);
+      formData.append('createdAt', new Date().toISOString());
+      formData.append('brand', `/api/brands/${this.formulaire.get('brand')?.value}`);
+      formData.append('category', `/api/categories/${this.formulaire.get('category')?.value}`);
 
-      this.apiService.postPart(partData).subscribe({
+      this.apiService.postPart(formData).subscribe({
         next: (response) => {
           console.log('Pièce ajoutée avec succès', response);
           this.formulaire.reset({ isAvailable: true });
