@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../services/api-service';
+import { AuthService } from '../../services/auth-service';
 import { Part } from '../../interfaces/part.interface';
 import { CurrencyPipe } from '@angular/common';
 @Component({
@@ -20,7 +21,7 @@ export class PartListComponent implements OnInit {
   brandFilter: string = '';
   isLoading = signal<boolean>(false);
 
-  constructor(private partService: ApiService) {}
+  constructor(private partService: ApiService, public authService: AuthService) {}
 
   get nbPages(): number {
     return Math.ceil(this.totalItems / this.itemsPerPage);

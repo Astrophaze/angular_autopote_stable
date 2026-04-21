@@ -20,9 +20,10 @@ export class BrandFormComponent {
 
   sendForm() {
     if (this.formulaire.valid) {
-      const brandData = new FormData();
-      brandData.append('name', this.formulaire.get('name')?.value);
-      brandData.append('country', this.formulaire.get('country')?.value);
+      const brandData = {
+        name: this.formulaire.get('name')?.value,
+        country: this.formulaire.get('country')?.value,
+      };
 
       this.apiService.postBrand(brandData).subscribe({
         next: (response) => {
