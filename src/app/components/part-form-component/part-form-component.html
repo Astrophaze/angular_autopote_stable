@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="card border-0 shadow bg-light p-4 mt-5">
+    <h1 class="text-muted text-center">Ajouter une pièce</h1>
+    <form [formGroup]="formulaire" (ngSubmit)="sendForm()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nom de la pièce</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+        @if (formulaire.get('name')?.touched) {
+          @if (formulaire.get('name')?.hasError('required')) {
+            <div class="text-danger">Le nom est obligatoire.</div>
+          } @else if (formulaire.get('name')?.hasError('minlength')) {
+            <div class="text-danger">Le nom doit faire au moins 2 caractères.</div>
+          } @else if (formulaire.get('name')?.hasError('maxlength')) {
+            <div class="text-danger">Le nom ne peut pas dépasser 100 caractères.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="reference" class="form-label">Référence</label>
+        <input type="text" class="form-control" id="reference" formControlName="reference" />
+        @if (formulaire.get('reference')?.touched) {
+          @if (formulaire.get('reference')?.hasError('required')) {
+            <div class="text-danger">La référence est obligatoire.</div>
+          } @else if (formulaire.get('reference')?.hasError('minlength')) {
+            <div class="text-danger">La référence doit faire au moins 2 caractères.</div>
+          } @else if (formulaire.get('reference')?.hasError('maxlength')) {
+            <div class="text-danger">La référence ne peut pas dépasser 100 caractères.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+        @if (formulaire.get('description')?.touched) {
+          @if (formulaire.get('description')?.hasError('maxlength')) {
+            <div class="text-danger">La description ne peut pas dépasser 500 caractères.</div>
+          }
+        }
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="price" class="form-label">Prix</label>
+          <input type="number" class="form-control" id="price" formControlName="price" step="0.01" />
+          @if (formulaire.get('price')?.touched) {
+            @if (formulaire.get('price')?.hasError('required')) {
+              <div class="text-danger">Le prix est obligatoire.</div>
+            } @else if (formulaire.get('price')?.hasError('min')) {
+              <div class="text-danger">Le prix doit être un nombre positif.</div>
+            }
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="stock" class="form-label">Stock</label>
+          <input type="number" class="form-control" id="stock" formControlName="stock" />
+          @if (formulaire.get('stock')?.touched) {
+            @if (formulaire.get('stock')?.hasError('required')) {
+              <div class="text-danger">Le stock est obligatoire.</div>
+            } @else if (formulaire.get('stock')?.hasError('min')) {
+              <div class="text-danger">Le stock doit être un nombre positif ou nul.</div>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="part_condition" class="form-label">Condition de la pièce</label>
+        <select class="form-control" id="part_condition" formControlName="part_condition">
+          <option value="">-- Sélectionner une condition --</option>
+          <option value="Neuf">Neuf</option>
+          <option value="Occasion">Occasion</option>
+          <option value="Reconditionné">Reconditionné</option>
+        </select>
+        @if (formulaire.get('part_condition')?.touched) {
+          @if (formulaire.get('part_condition')?.hasError('required')) {
+            <div class="text-danger">La condition de la pièce est obligatoire.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="brand" class="form-label">Marque</label>
+        <select class="form-control" id="brand" formControlName="brand">
+          <option value="">-- Sélectionner une marque --</option>
+          @for (brand of brands; track brand.id) {
+            <option [value]="brand.id">{{ brand.name }}</option>
+          }
+        </select>
+        @if (formulaire.get('brand')?.touched) {
+          @if (formulaire.get('brand')?.hasError('required')) {
+            <div class="text-danger">La marque est obligatoire.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="category" class="form-label">Catégorie</label>
+        <select class="form-control" id="category" formControlName="category">
+          <option value="">-- Sélectionner une catégorie --</option>
+          @for (category of categories; track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+        @if (formulaire.get('category')?.touched) {
+          @if (formulaire.get('category')?.hasError('required')) {
+            <div class="text-danger">La catégorie est obligatoire.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="isAvailable" formControlName="isAvailable" />
+        <label class="form-check-label" for="isAvailable">Disponible</label>
+      </div>
+
+      <button type="submit" class="btn btn-info" [disabled]="formulaire.invalid">Créer</button>
+    </form>
+  </div>
+</div>

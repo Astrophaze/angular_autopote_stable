@@ -1,22 +1,43 @@
 <div class="container">
-    <div class="card border-0 shadow bg-light p-4 mt-5">
-
-        <h1 class="text-muted text-center">Ajouter une catégorie</h1>
-        <form [formGroup]="formulaire" (ngSubmit)="sendForm()">
-            <div class="mb-3">
-                <label for="name" class="form-label">Nom de la catégorie</label>
-                <input type="text" class="form-control" id="name" formControlName="name" />
+  <div class="card border-0 shadow bg-light p-4 mt-5">
+    <h1 class="text-muted text-center">Ajouter une catégorie</h1>
+    <form [formGroup]="formulaire" (ngSubmit)="sendForm()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nom de la catégorie</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+        @if (formulaire.get('name')?.touched) {
+          @if (formulaire.get('name')?.hasError('required')) {
+            <div class="text-danger">Le nom de la catégorie est requis.</div>
+          } @else if (formulaire.get('name')?.hasError('minlength')) {
+            <div class="text-danger">
+              Le nom de la catégorie doit comporter au moins 2 caractères.
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description de la catégorie</label>
-                <textarea
-                class="form-control"
-                id="description"
-                rows="3"
-                formControlName="description"
-                ></textarea>
+          } @else if (formulaire.get('name')?.hasError('maxlength')) {
+            <div class="text-danger">
+              Le nom de la catégorie ne doit pas dépasser 100 caractères.
             </div>
-            <button type="submit" class="btn btn-info">Créer</button>
-        </form>
-    </div>
+          }
+        }
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description de la catégorie</label>
+        <textarea
+          class="form-control"
+          id="description"
+          rows="3"
+          formControlName="description"
+        ></textarea>
+        @if (formulaire.get('description')?.touched) {
+          @if (formulaire.get('description')?.hasError('required')) {
+            <div class="text-danger">La description de la catégorie est requise.</div>
+          } @else if (formulaire.get('description')?.hasError('minlength')) {
+            <div class="text-danger">La description doit comporter au moins 10 caractères.</div>
+          } @else if (formulaire.get('description')?.hasError('maxlength')) {
+            <div class="text-danger">La description ne doit pas dépasser 500 caractères.</div>
+          }
+        }
+      </div>
+      <button type="submit" class="btn btn-info" [disabled]="formulaire.invalid">Créer</button>
+    </form>
+  </div>
 </div>
